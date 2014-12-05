@@ -1,4 +1,5 @@
 import socket
+import select
 
 
 class Server(object):
@@ -28,8 +29,12 @@ class Server(object):
     def close(self):
         self.ss.close()
 
+        epoll.unregister(ss.fileno())
+        epoll.close()
+        ss.close()
+
 if __name__ == '__main__':
-    serveraddr = ('127.0.0.1', 5000)
+    serveraddr = ('104.224.132.120', 5000)
     port = 5001
     ss = Server(port=port)
     ss.send_data(serveraddr, 'client connect')
